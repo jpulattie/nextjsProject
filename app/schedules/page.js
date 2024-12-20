@@ -1,4 +1,4 @@
-export default function Roster() {
+export default function Schedule() {
     return(
         <div>
             <p>Schedules Page</p>

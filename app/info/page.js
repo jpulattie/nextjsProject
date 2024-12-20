@@ -1,4 +1,4 @@
-export default function Roster() {
+export default function Info() {
     return(
         <div>
             <h1>Info</h1>
