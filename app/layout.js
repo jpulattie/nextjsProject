@@ -1,6 +1,8 @@
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import Link from 'next/link';
+import Image from "next/image";
+
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -23,28 +25,50 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body
-        className="ml-[10%] mr-[10%] bg-black text-black text-center {`${roboto.variable} antialiased`}"
+        className="ml-[10%] mr-[10%] bg-white text-myrtleGreen text-center {`${roboto.variable} antialiased`}"
       >
     
-      <header className="grid grid-cols-auto grid-row-2 gap-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 container m-auto bg-green-500">
-          <h1 className="row-start-1 col-span-full font-roboto text-lg text-red-500 text-4xl">NTX DEVILS FOOTY</h1>
-          <nav className="row-start-2 gap-1 col-span-6 grid cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 container m-auto">
-            <Link className="tile bg-red-500" href="/rosters">Rosters</Link>
-            <Link className="tile bg-red-200" href="/schedules">Schedules</Link>
-            <Link className="tile bg-red-500" href="/info">Info/About</Link>
-            <Link className="tile bg-red-200" href="/photos">Photos</Link>
-            <Link className="tile bg-red-500" href="/sponsors">Sponsors</Link> 
-            <Link className="tile bg-red-200" href="/">Announcements</Link>
+      <header className="grid grid-row-2 gap-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 container m-auto bg-myrtleGreen text-primroseYellow">
+          <div className="col-span-1 sm:col-span-6 md:col-span-6 lg:col-span-6 flex justify-between items-center bg-myrtleGreen text-primroseYellow">
+
+            <Image
+                      className="dark:invert max-w-[65px] object-contain p-2"
+                      src="/logo.png"
+                      alt="NTX Devils logo"
+                      width={180}
+                      height={38}
+                      sizes="(max-width: 65px) 50vw, 180px" // Optional: specify how the image scales on smaller screens
+                      priority
+                    />
+            <Link href="/" className="col-span-2 font-roboto text-lg text-4.5xl bg-myrtleGreen text-primroseYellow text-center">
+              <h1>NTX DEVILS FOOTY</h1>
+            </Link>
+            <Image
+                      className="dark:invert w-auto max-h-[65px] p-2"
+                      src="/usaflLogo.png"
+                      alt="USAFL logo"
+                      width={180}
+                      height={38}
+                      priority
+                    />
+          </div>
+          <nav className="row-start-2 gap-1 col-span-6 grid cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 container m-auto bg-primroseYellow text-myrtleGreen text-base">
+            <Link className="col-span-1" href="/rosters">Rosters</Link>
+            <Link className="col-span-1" href="/schedules">Schedules</Link>
+            <Link className="col-span-1" href="/info">Info/About</Link>
+            <Link className="col-span-1" href="/photos">Photos</Link>
+            <Link className="col-span-1" href="/sponsors">Sponsors</Link> 
+            <Link className="col-span-1 text-responsive" href="/">Announcements</Link>
           </nav>
 
       </header>
 
-        <main className="text-center grid grid-cols-1 grid-row-6 row-span-6 container m-auto bg-yellow-200">
+        <main className="text-center grid grid-cols-1 grid-row-6 row-span-6 container m-auto bg-primroseYellow text-myrtleGreen">
           {children}
         </main>
 
 
-      <footer className="grid grid-cols-1 grid-row-6 container m-auto bg-orange-200">
+      <footer className="grid grid-cols-1 grid-row-6 container m-auto bg-[#]">
         <p>&copy; Josh Pulattie 2024</p>
       </footer>
 
