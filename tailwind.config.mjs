@@ -10,13 +10,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        myrtleGreen: '#317873',
-        primroseYellow: '#f6d155',
-        roseRed: '#FF033E'
       },
-      fontSize: {
-        "4.5xl":"2rem"
-      }
     },
   },
   plugins: [],
