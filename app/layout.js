@@ -12,16 +12,16 @@ const roboto = Roboto({
 
 
 export const metadata = {
-  title: "NTX Devils",
-  description: "North Texas Devils Australian Rules Football Club",
+  title: "MOKCU",
+  description: "MOK Credit Union",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <title>NTX Devils</title>
-        <meta name="description" content="NTX Aussie Rules Football Club" />
+        <title>MOKCU Online Banking</title>
+        <meta name="description" content="MOK Credit Union Online Banking" />
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body
@@ -31,44 +31,27 @@ export default function RootLayout({ children }) {
       <header className="grid grid-row-2 gap-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 container m-auto bg-myrtleGreen text-primroseYellow">
           <div className="col-span-1 sm:col-span-6 md:col-span-6 lg:col-span-6 flex justify-between items-center bg-myrtleGreen text-primroseYellow">
 
-            <Image
-                      className="dark:invert max-w-[65px] object-contain p-2"
-                      src="/logo.png"
-                      alt="NTX Devils logo"
-                      width={180}
-                      height={38}
-                      sizes="(max-width: 65px) 50vw, 180px" // Optional: specify how the image scales on smaller screens
-                      priority
-                    />
-            <Link href="/" className="col-span-2 font-roboto text-lg text-4.5xl bg-myrtleGreen text-primroseYellow text-center">
-              <h1>NTX DEVILS FOOTY</h1>
+            
+            <Link href="/" className="col-span-6 font-roboto text-lg text-4.5xl bg-myrtleGreen text-primroseYellow text-center">
+              <h1>MOK Credit Union Online Banking</h1>
             </Link>
-            <Image
-                      className="dark:invert w-auto max-h-[65px] p-2"
-                      src="/usaflLogo.png"
-                      alt="USAFL logo"
-                      width={180}
-                      height={38}
-                      priority
-                    />
+
           </div>
           <nav className="row-start-2 gap-1 col-span-6 grid cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 container m-auto bg-primroseYellow text-myrtleGreen text-base">
-            <Link className="col-span-1" href="/rosters">Rosters</Link>
-            <Link className="col-span-1" href="/schedules">Schedules</Link>
-            <Link className="col-span-1" href="/info">Info/About</Link>
-            <Link className="col-span-1" href="/photos">Photos</Link>
-            <Link className="col-span-1" href="/sponsors">Sponsors</Link> 
-            <Link className="col-span-1 text-responsive" href="/">Announcements</Link>
+            <Link className="col-span-2" href="/rosters">View Accounts</Link>
+            <Link className="col-span-2" href="/schedules">Transfer Funds</Link>
+            <Link className="col-span-2" href="/">Logout</Link>
+
           </nav>
 
       </header>
 
-        <main className="text-center grid grid-cols-1 grid-row-6 row-span-6 container m-auto bg-primroseYellow text-myrtleGreen">
+        <main className="text-center grid grid-cols-1 grid-row-6 row-span-6 container m-auto bg-white text-myrtleGreen">
           {children}
         </main>
 
 
-      <footer className="grid grid-cols-1 grid-row-6 container m-auto bg-[#]">
+      <footer className="grid grid-cols-1 grid-row-6 container m-auto bg-myrtleGreen text-primroseYellow">
         <p>&copy; Josh Pulattie 2024</p>
       </footer>
 

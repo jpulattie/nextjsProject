@@ -1,34 +1,27 @@
 import Image from "next/image";
+import Form from 'next/form';
+//import { useState } from 'react';  
 
 export default function Home() {
+  //let [userName, setUserName] = useState('');
+  //let [password, setPassword] = useState('');
+
+  const handleSubmit = (submit) => {
+    event.preventDefault();
+    console.log('username: ',userName);
+    console.log('password: ',password);
+  };
+
   return (
     <div>
       <main>
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-       
-
         <div>
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
+          <h2> Please Login </h2>
+          <Form action="/Calls">
+            <input name="username" />
+            <input password="password" /> 
+            <button type="submit">Login</button>
+          </Form>
         </div>
       </main>
       
