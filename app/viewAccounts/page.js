@@ -1,4 +1,4 @@
-export default function Sponsors() {
+export default function ViewAccounts() {
     return(
         <div>
             <h1>Sponsors Page</h1>

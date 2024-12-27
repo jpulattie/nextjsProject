@@ -1,6 +1,8 @@
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import Link from 'next/link';
+import Image from "next/image";
+
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -10,41 +12,46 @@ const roboto = Roboto({
 
 
 export const metadata = {
-  title: "NTX Devils",
-  description: "North Texas Devils Australian Rules Football Club",
+  title: "MOKCU",
+  description: "MOK Credit Union",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <title>NTX Devils</title>
-        <meta name="description" content="NTX Aussie Rules Football Club" />
+        <title>MOKCU Online Banking</title>
+        <meta name="description" content="MOK Credit Union Online Banking" />
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body
-        className="ml-[10%] mr-[10%] bg-black text-black text-center {`${roboto.variable} antialiased`}"
+        className="ml-[10%] mr-[10%] bg-white text-myrtleGreen text-center {`${roboto.variable} antialiased`}"
       >
     
-      <header className="grid grid-cols-auto grid-row-2 gap-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 container m-auto bg-green-500">
-          <h1 className="row-start-1 col-span-full font-roboto text-lg text-red-500 text-4xl">NTX DEVILS FOOTY</h1>
-          <nav className="row-start-2 gap-1 col-span-6 grid cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 container m-auto">
-            <Link className="tile bg-red-500" href="/rosters">Rosters</Link>
-            <Link className="tile bg-red-200" href="/schedules">Schedules</Link>
-            <Link className="tile bg-red-500" href="/info">Info/About</Link>
-            <Link className="tile bg-red-200" href="/photos">Photos</Link>
-            <Link className="tile bg-red-500" href="/sponsors">Sponsors</Link> 
-            <Link className="tile bg-red-200" href="/">Announcements</Link>
+      <header className="grid grid-row-2 gap-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 container m-auto bg-myrtleGreen text-primroseYellow">
+          <div className="col-span-1 sm:col-span-6 md:col-span-6 lg:col-span-6 flex justify-between items-center bg-myrtleGreen text-primroseYellow">
+
+            
+            <Link href="/" className="col-span-6 font-roboto text-lg text-4.5xl bg-myrtleGreen text-primroseYellow text-center">
+              <h1>MOK Credit Union Online Banking</h1>
+            </Link>
+
+          </div>
+          <nav className="row-start-2 gap-1 col-span-6 grid cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 container m-auto bg-primroseYellow text-myrtleGreen text-base">
+            <Link className="col-span-2" href="/rosters">View Accounts</Link>
+            <Link className="col-span-2" href="/schedules">Transfer Funds</Link>
+            <Link className="col-span-2" href="/">Logout</Link>
+
           </nav>
 
       </header>
 
-        <main className="text-center grid grid-cols-1 grid-row-6 row-span-6 container m-auto bg-yellow-200">
+        <main className="text-center grid grid-cols-1 grid-row-6 row-span-6 container m-auto bg-white text-myrtleGreen">
           {children}
         </main>
 
 
-      <footer className="grid grid-cols-1 grid-row-6 container m-auto bg-orange-200">
+      <footer className="grid grid-cols-1 grid-row-6 container m-auto bg-myrtleGreen text-primroseYellow">
         <p>&copy; Josh Pulattie 2024</p>
       </footer>
 
