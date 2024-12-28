@@ -10,7 +10,7 @@ export const EndUserLogin = async () => {
     const url = process.env.CONNECTION_URL
 
     const call = `<query xmlns="http://www.corelationinc.com/queryLanguage/v1.0"
-    sessionId="${req.session.sessionID}">
+    sessionId="${req.session.sessionId}">
     <sequence>
       <transaction>
       <step>

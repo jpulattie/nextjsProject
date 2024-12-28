@@ -33,11 +33,13 @@ export default async function handler(req,res) {
             // Convert XML to JSON
             const data = await parseStringPromise(xmlResponse, { explicitArray: false });
             console.log('Parsed JSON response:', data);
-            sessionId = response[0].query[0].logon[0].sessionId[0];
-            response.status(200).json(data)
+            sessionId = data.query?.logon?.sessionId;
+            console.log('session id:',sessionId)
+            return sessionId
+            //response.status(200).json(data)
         } else {
             console.error('Error with vendor login: ', response.statusText);
-            response.status(response.status).json({error: response.statusText});
+            //response.status(response.status).json({error: response.statusText});
         }
         } catch (error) {
             console.error('Fetch error: ', error);

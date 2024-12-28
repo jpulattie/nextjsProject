@@ -10,6 +10,7 @@ export default function Home() {
   let vendorUser = process.env.vendorUser;
   let vendorPass = process.env.vendorPass;
   let url = process.env.CONNECTION_URL;
+  let sessionId = process.env.sessionId;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,24 +29,16 @@ export default function Home() {
 
     if (!vendorLoginResponse.ok) {
         console.error('Vendor login failed with status:', vendorLoginResponse.status);
-        setError('Vendor login failed');
+        //setError('Vendor login failed');
         return;
       }
-    
-    const data = await vendorLoginResponse.json();
-    console.log('Vendor login response:', data);
-
-    const sessionID = data.sessionID; // Adjust this based on your actual response
-    console.log('Session ID:', sessionID);
-
-  
 
     const endUserLoginResponse = await fetch('/api/endUserLogin', {
       method: 'POST',
       headers: {
         'Content-Type':'application/json',
       },
-      body: JSON.stringify({ userName, password, sessionID }),
+      body: JSON.stringify({ userName, password, sessionId }),
       });
 
     const data2 = await endUserLoginResponse.json();
