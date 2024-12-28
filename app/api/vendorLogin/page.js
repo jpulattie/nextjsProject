@@ -1,5 +1,5 @@
 
-
+import { parseStringPromise } from 'xml2js';
 
 export default async function handler(req,res) {
     const vendorUser = process.env.vendorUser
@@ -26,9 +26,13 @@ export default async function handler(req,res) {
                 }
             });
         if (response.ok) {
-            console.log(response)
-            const data = await response;
-            console.log('response from vendorLogin: ', data);
+            const xmlResponse = await response.text(); // Get the XML response as text
+            console.log('Raw XML response:', xmlResponse);
+
+            // Convert XML to JSON
+            const data = await parseStringPromise(xmlText, { explicitArray: false });
+            console.log('Parsed JSON response:', data);
+
             process.env.sessionId = response;
             res.status(200).json(data)
         } else {
