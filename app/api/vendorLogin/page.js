@@ -5,6 +5,7 @@ export default async function handler(req,res) {
     const vendorUser = process.env.vendorUser
     const vendorPass = process.env.vendorPass
     const url = process.env.CONNECTION_URL
+    let sessionId = process.env.sessionId
 
     const call = `
     <query xmlns="http://www.corelationinc.com/queryLanguage/v1.0">
@@ -30,18 +31,16 @@ export default async function handler(req,res) {
             console.log('Raw XML response:', xmlResponse);
 
             // Convert XML to JSON
-            const data = await parseStringPromise(xmlText, { explicitArray: false });
+            const data = await parseStringPromise(xmlResponse, { explicitArray: false });
             console.log('Parsed JSON response:', data);
-
-            process.env.sessionId = response;
-            res.status(200).json(data)
+            sessionId = response[0].query[0].logon[0].sessionId[0];
+            response.status(200).json(data)
         } else {
             console.error('Error with vendor login: ', response.statusText);
-            res.status(response.status).json({error: response.statusText});
+            response.status(response.status).json({error: response.statusText});
         }
         } catch (error) {
             console.error('Fetch error: ', error);
-            res.status(500).json({error: 'internal server Error'});
         }
         }
 
