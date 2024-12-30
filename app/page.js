@@ -18,7 +18,7 @@ export default function Home() {
     console.log('password: ',password);
 
     try {
-      const endUserLoginResponse = await fetch('/api/endUserLogin', {
+      const endUserLoginResponse = await fetch('/api/endUserLogin/page.js', {
         method: 'POST',
         headers: {
           'Content-Type':'application/json',
