@@ -17,7 +17,24 @@ export default function Home() {
     console.log('username: ',userName);
     console.log('password: ',password);
 
-    const vendorLoginResponse = await fetch('/api/vendorLogin', {
+    try {
+      const endUserLoginResponse = await fetch('/api/endUserLogin', {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json',
+        },
+        body: JSON.stringify({ userName: userName, userPassword: password, sessionId: sessionId }),
+        });
+  
+      const data2 = await endUserLoginResponse.json();
+      if (endUserLoginResponse.ok) {
+        console.log('Login successful:', data2);
+        router.push('/app/viewAccounts/page.js')
+      } else {
+        setError(data2.message);
+      }
+    }
+    catch {    const vendorLoginResponse = await fetch('/api/vendorLogin', {
       method: 'POST',
       headers: {
         'Content-Type':'application/json',
@@ -32,25 +49,9 @@ export default function Home() {
         //setError('Vendor login failed');
         return;
       }
-
-    const endUserLoginResponse = await fetch('/api/endUserLogin', {
-      method: 'POST',
-      headers: {
-        'Content-Type':'application/json',
-      },
-      body: JSON.stringify({ userName, password, sessionId }),
-      });
-
-    const data2 = await endUserLoginResponse.json();
-    if (endUserLoginResponse.ok) {
-      console.log('Login successful:', data2);
-      router.push('/app/viewAccounts/page.js')
-    } else {
-      setError(data2.message);
-    }
   };
   
-
+  }
   return (
     <div>
       <main>

@@ -1,16 +1,19 @@
 'use client'
+import { NextApiRequest, NextApiResponse } from 'next'
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 
-export const EndUserLogin = async () => {
-    const router = useRouter();
-    const vendorUser = process.env.vendorUser
-    const vendorPass = process.env.vendorPass
-    const url = process.env.CONNECTION_URL
+export default async function handler(req ,res) {
+    console.log('method', req.method)
+    //const data = await req.json()
+    //console.log('request to end user login from page.js:', data)
+    const { userName, userPassword, sessionId } = req.body;
+    const url = process.env.CONNECTION_URL;
+    let sessionStatus = '';
 
     const call = `<query xmlns="http://www.corelationinc.com/queryLanguage/v1.0"
-    sessionId="${req.session.sessionId}">
+    sessionId="${sessionId}">
     <sequence>
       <transaction>
       <step>
@@ -32,9 +35,9 @@ export const EndUserLogin = async () => {
                 'Content-Type':'application/xml',
                 }});
         if (response.ok) {
-            const data = await response.json();
-            console.log('response from vendorLogin: ', data);
-            router.push('/app/api/endUserLogin/page.js')
+            const data = await response.text();
+            console.log('Raw XML end user login response:', data)
+
         } else {
             console.error('Error with vendor login: ', response.statusText);
         }
@@ -43,8 +46,5 @@ export const EndUserLogin = async () => {
         }
         }
 
-        useEffect(() => {
-            vendorLoginCall();
-        }, []);
 
 
