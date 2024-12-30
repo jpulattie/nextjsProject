@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 
 
 export default async function handler(req ,res) {
+    console.log('request:', req.body)
+    res.status(200).json({message: "working"})
+    /*
     console.log('method', req.method)
     //const data = await req.json()
     //console.log('request to end user login from page.js:', data)
@@ -44,6 +47,7 @@ export default async function handler(req ,res) {
         } catch (error) {
             console.error('Fetch error: ', error);
         }
+            */
         }
 
 

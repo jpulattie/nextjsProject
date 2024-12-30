@@ -18,12 +18,12 @@ export default function Home() {
     console.log('password: ',password);
 
     try {
-      const endUserLoginResponse = await fetch('/api/endUserLogin/page.js', {
+      const endUserLoginResponse = await fetch('/api/endUserLogin', {
         method: 'POST',
         headers: {
           'Content-Type':'application/json',
         },
-        body: JSON.stringify({ userName: userName, userPassword: password, sessionId: sessionId }),
+        body: JSON.stringify({ test: 'test' }),
         });
   
       const data2 = await endUserLoginResponse.json();
