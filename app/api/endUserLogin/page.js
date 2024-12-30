@@ -1,14 +1,10 @@
-'use client'
-import { NextApiRequest, NextApiResponse } from 'next'
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { parseStringPromise } from 'xml2js';
 
 
-export default async function handler(req ,res) {
+export default async function POST(req ,res) {
+    //const request = await req.headers.get('Content-Type');
     console.log('request:', req.body)
-    res.status(200).json({message: "working"})
-    /*
-    console.log('method', req.method)
+    
     //const data = await req.json()
     //console.log('request to end user login from page.js:', data)
     const { userName, userPassword, sessionId } = req.body;
@@ -39,7 +35,7 @@ export default async function handler(req ,res) {
                 }});
         if (response.ok) {
             const data = await response.text();
-            console.log('Raw XML end user login response:', data)
+            console.log('Raw XML end user login response:', request.body)
 
         } else {
             console.error('Error with vendor login: ', response.statusText);
@@ -47,7 +43,7 @@ export default async function handler(req ,res) {
         } catch (error) {
             console.error('Fetch error: ', error);
         }
-            */
+            
         }
 
 

@@ -23,7 +23,7 @@ export default function Home() {
         headers: {
           'Content-Type':'application/json',
         },
-        body: JSON.stringify({ test: 'test' }),
+        body: JSON.stringify({ userName, userPassword: password, sessionId }),
         });
   
       const data2 = await endUserLoginResponse.json();
