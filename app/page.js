@@ -75,8 +75,9 @@ export default function Home() {
 
     //console.log('response from end user login', endUserLoginResponse)
     console.log('sessionId', sessionId)
-    console.log('testing if else:', endUserLoginResponse.ok, "session part", (sessionId === undefined))
-    if (endUserLoginResponse.ok && sessionId === undefined) {
+    console.log('endUserLoginResponse:', endUserLoginResponse.sessionId);
+    console.log('testing if else:', endUserLoginResponse.ok, "session part", (sessionId !== undefined))
+    if (endUserLoginResponse.sessionId === 'no session Id') {
       console.log('sessionId undefined, trying vendor and end user logins again')
       let vendorLoginResponse = await vendorLogin();
       sessionId = vendorLoginResponse;

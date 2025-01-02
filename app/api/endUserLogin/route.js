@@ -37,11 +37,16 @@ export async function POST(req ,res) {
             //const data = await response.text();
             //console.log('Raw XML end user login response:', data.body)
             console.log('sending respond from end user login')
-            //sessionId = await Response.query?.logon?.sessionId;
-
+            sessionId = await Response.query?.logon?.sessionId;
+            if (sessionId === undefined) {
+                sessionId = 'no session Id';
+            } else {
+                sessionId = Response.query?.logon?.sessionId;
+            }
             console.log('sessionId:', sessionId)
 
-            return new Response(JSON.stringify({ loggedIn : "yes", sessionId : sessionId }), {
+
+            return new Response(JSON.stringify({ sessionId : sessionId }), {
                 status:200,
                 headers: {
                   'Content-Type': 'application/json'
