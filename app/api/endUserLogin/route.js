@@ -10,6 +10,7 @@ export async function POST(req ,res) {
     let { userName, userPassword, sessionId } = data;
     const url = process.env.CONNECTION_URL;
     let sessionStatus = '';
+    let sessionException;
 
     const call = `<query xmlns="http://www.corelationinc.com/queryLanguage/v1.0"
     sessionId="${sessionId}">
@@ -28,6 +29,8 @@ export async function POST(req ,res) {
 
         try {
             console.log('username: '+ userName + ' password: '+ userPassword + ' sessionId: ' + sessionId);
+            console.log('end user login call', call)
+
             const response = await fetch(url, {
                 method: 'POST',
                 body: call,
@@ -40,16 +43,28 @@ export async function POST(req ,res) {
 
             //console.log('Raw XML end user login response:', data.body)
             console.log('sending respond from end user login')
+            console.log('response from end user call:', response)
             console.log('parsedXML:', parsedXML);
-            sessionId = await parsedXML.query?.logon?.sessionId;
-            console.log('session id check:', sessionId);
+            if (parsedXML.query.sequence[0].transaction[0].exception === undefined) {
+            sessionException = parsedXML.query.sequence[0].transaction[0].exception[0].message[0];
+            console.log('exception check:', sessionException);
+            }
+            const notLoggedIn = 'Session not logged on or session timed out'
 
-            if (sessionId === undefined) {
-                sessionId = 'no session Id';
+            if (sessionException === notLoggedIn) {
+                console.log('Not Logged in')
+                sessionId = sessionException;
+                return new Response(JSON.stringify({ sessionId : sessionId, sessionException }), {
+                    status:200,
+                    headers: {
+                      'Content-Type': 'application/json'
+              
+                    },
+                  });
             } else {
                 sessionId = Response.query?.logon?.sessionId;
-            }
-            console.log('sessionId:', sessionId)
+            
+            
 
 
             return new Response(JSON.stringify({ sessionId : sessionId }), {
@@ -60,11 +75,12 @@ export async function POST(req ,res) {
                 },
               });
 
-        } else {
+        }} else {
             console.error('Error with vendor login: ', response.statusText);
         }
         } catch (error) {
             console.error('Fetch error: ', error);
         }
             
-        }
+    };
+

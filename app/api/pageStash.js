@@ -74,7 +74,10 @@ export default function Home() {
               placeholder="Username"
             />
             <input type="password" 
-            
+             name="password"
+             value={password}
+             onChange={(e) => setPassword(e.target.value)}
+             placeholder="Password"
             /> 
             <button type="submit">Login</button>
           </form>

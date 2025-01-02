@@ -12,6 +12,7 @@ export default function Home() {
   let url = process.env.CONNECTION_URL;
   let sessionId;
 
+
   const vendorLogin = async() => {
     try {
       const response = await fetch('/api/vendorLogin', {
@@ -72,16 +73,22 @@ export default function Home() {
 
 
     console.log('trying end user login')
-    let endUserLoginResponse = await endUserLogin();
+    console.log('username: '+ userName + ' password: '+ password + ' sessionId: ' + sessionId);
+    if (sessionId === undefined){
+      let vendorLoginResponse = await vendorLogin();
+      console.log('sessionId undefined, trying vendor and end user logins again')
+      sessionId = vendorLoginResponse;
+      console.log('new session id:', sessionId)
+    }
+    let endUserLoginResponse = await endUserLogin(sessionId);
 
 
-    //console.log('response from end user login', endUserLoginResponse)
+    //console.log('response from end user login')
     console.log('sessionId', sessionId)
     console.log('endUserLoginResponse:', endUserLoginResponse.sessionId);
     console.log('testing if else:', endUserLoginResponse.ok, "session part", (sessionId !== undefined))
-    if (endUserLoginResponse.sessionId === 'no session Id') {
+    if (endUserLoginResponse.sessionId === 'Session not logged on or session timed out') {
       console.log('sessionId undefined, trying vendor and end user logins again')
-      let vendorLoginResponse = await vendorLogin();
       sessionId = vendorLoginResponse;
       console.log('new session id:', sessionId)
       let retryEndUser = await endUserLogin(sessionId);
@@ -110,9 +117,12 @@ export default function Home() {
               onChange={(e) => setUserName(e.target.value)}
               placeholder="Username"
             />
-            <input type="password"
-
-            />
+            <input type="password" 
+             name="password"
+             value={password}
+             onChange={(e) => setPassword(e.target.value)}
+             placeholder="Password"
+            /> 
             <button type="submit">Login</button>
           </form>
         </div>
