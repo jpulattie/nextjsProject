@@ -12,20 +12,55 @@ export default function Home() {
   let url = process.env.CONNECTION_URL;
   let sessionId;
 
-  const async vendorLoginResponse = await fetch('/api/vendorLogin', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ vendorUser, vendorPass, url }),
-  });
-  const async endUserLoginResponse = await fetch('./api/endUserLogin', {
+  const vendorLogin = async() => {
+    try {
+      const response = await fetch('/api/vendorLogin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ vendorUser, vendorPass, url }),
+      });
+      if (response.ok){
+        const data = await response.json();
+        sessionId = data.sessionId;
+        console.log('returned sessionId:', sessionId)
+        return sessionId;
+      } else {
+        console.error("Vendor Login Failed:", response.statusText);
+        return;
+      }
+      } catch (error) {
+        console.error('error during vendor login:', error);
+        return
+      }
+    }
+  
+  
+  
+  const endUserLogin = async () => {
+    try {
+      const response = await fetch('./api/endUserLogin', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ userName, userPassword: password, sessionId }),
   });
+  if (response.ok){
+    const data = await response.json();
+    return data;
+  } else {
+    console.error("Vendor Login Failed:", response.statusText);
+    return;
+  }
+  } catch (error) {
+    console.error('error during vendor login:', error);
+    return
+  }
+}
+
+    
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,7 +70,8 @@ export default function Home() {
 
 
     console.log('trying end user login')
-    endUserLoginResponse();
+    let endUserLoginResponse = await endUserLogin();
+    let vendorLoginResponse = await vendorLogin();
 
     const data2 = await endUserLoginResponse.json();
     console.log('response from end user login', data2)
