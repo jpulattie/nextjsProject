@@ -71,38 +71,27 @@ export default function Home() {
 
     console.log('trying end user login')
     let endUserLoginResponse = await endUserLogin();
-    let vendorLoginResponse = await vendorLogin();
 
-    const data2 = await endUserLoginResponse.json();
-    console.log('response from end user login', data2)
+
+    //console.log('response from end user login', endUserLoginResponse)
     console.log('sessionId', sessionId)
+    console.log('testing if else:', endUserLoginResponse.ok, "session part", (sessionId === undefined))
     if (endUserLoginResponse.ok && sessionId === undefined) {
       console.log('sessionId undefined, trying vendor and end user logins again')
-      
-      console.log('no session id found, vendor login ran')
+      let vendorLoginResponse = await vendorLogin();
+      sessionId = vendorLoginResponse;
       console.log('new session id:', sessionId)
       return;
       
     } else if (endUserLoginResponse.ok && sessionId !== undefined) {
-      console.log('Login successful:', data2.loggedIn);
+      console.log('Login successful:', endUserLoginResponse);
       console.log('sessionId:' + sessionId + '(end sessionId)')
 
       //router.push('/app/viewAccounts/page.js')
-    } else {
-
-      console.log('Login unsuccessful:', data2);
-      vendorLoginResponse();
-
-      console.log('here', vendorLoginResponse)
-
-      if (!vendorLoginResponse.ok) {
-        console.error('Vendor login failed with status:', vendorLoginResponse.status);
-        //setError('Vendor login failed');
-        return;
-      }
+    
     };
-
   }
+  
   return (
     <div>
       <main>
