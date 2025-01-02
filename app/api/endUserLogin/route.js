@@ -5,9 +5,9 @@ export async function POST(req ,res) {
     //const request = await req.headers.get('Content-Type');
 
     
-    //const data = await req.json()
+    const data = await req.json()
     //console.log('request to end user login from page.js:', data)
-    let { userName, userPassword, sessionId } = req.body;
+    let { userName, userPassword, sessionId } = data;
     const url = process.env.CONNECTION_URL;
     let sessionStatus = '';
 
@@ -35,10 +35,14 @@ export async function POST(req ,res) {
                 'Content-Type':'application/xml',
                 }});
         if (response.ok) {
-            //const data = await response.text();
+            const xmldata = await response.text();
+            const parsedXML = await parseStringPromise(xmldata);
+
             //console.log('Raw XML end user login response:', data.body)
             console.log('sending respond from end user login')
-            sessionId = await Response.query?.logon?.sessionId;
+            console.log('parsedXML:', parsedXML);
+            sessionId = await parsedXML.query?.logon?.sessionId;
+            console.log('session id check:', sessionId);
 
             if (sessionId === undefined) {
                 sessionId = 'no session Id';
