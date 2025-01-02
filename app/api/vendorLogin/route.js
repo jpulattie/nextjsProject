@@ -9,6 +9,7 @@ export async function POST(req,res) {
     const vendorPass = process.env.vendorPass;
     const url = process.env.CONNECTION_URL;
     let sessionId = process.env.sessionId;
+    let callCount = 'count';
 
     const call = `
     <query xmlns="http://www.corelationinc.com/queryLanguage/v1.0">
@@ -19,7 +20,7 @@ export async function POST(req,res) {
         </logon>
     </query>
     `;
-    console.log('here2', call)
+    console.log('call', callCount)
 
         try {
             const response = await fetch(url, {
@@ -31,13 +32,13 @@ export async function POST(req,res) {
             });
         if (response.ok) {
             const xmlResponse = await response.text(); // Get the XML response as text
-            console.log('Raw XML response:', xmlResponse);
+            //console.log('Raw XML response:', xmlResponse);
 
             // Convert XML to JSON
             const data = await parseStringPromise(xmlResponse, { explicitArray: false });
-            console.log('Parsed JSON response:', data);
+            //console.log('Parsed JSON response:', data);
             sessionId = data.query?.logon?.sessionId;
-            console.log('session id:',sessionId)
+            //console.log('session id:',sessionId)
             
             return new Response(JSON.stringify({ sessionId: sessionId }), {
                 status:200,

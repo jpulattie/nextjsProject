@@ -38,17 +38,19 @@ export default function Home() {
   
   
   
-  const endUserLogin = async () => {
+  const endUserLogin = async (sessionIdparam) => {
     try {
+      console.log('session id parameter:', sessionIdparam)
       const response = await fetch('./api/endUserLogin', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userName, userPassword: password, sessionId }),
+    body: JSON.stringify({ userName, userPassword: password, sessionId: sessionIdparam }),
   });
   if (response.ok){
     const data = await response.json();
+    console.log('data from end user login function:', data)
     return data;
   } else {
     console.error("Vendor Login Failed:", response.statusText);
@@ -82,6 +84,8 @@ export default function Home() {
       let vendorLoginResponse = await vendorLogin();
       sessionId = vendorLoginResponse;
       console.log('new session id:', sessionId)
+      let retryEndUser = await endUserLogin(sessionId);
+      console.log('second try at end user login:', retryEndUser)
       return;
       
     } else if (endUserLoginResponse.ok && sessionId !== undefined) {

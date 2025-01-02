@@ -27,6 +27,7 @@ export async function POST(req ,res) {
     `;
 
         try {
+            console.log('username: '+ userName + ' password: '+ userPassword + ' sessionId: ' + sessionId);
             const response = await fetch(url, {
                 method: 'POST',
                 body: call,
@@ -38,6 +39,7 @@ export async function POST(req ,res) {
             //console.log('Raw XML end user login response:', data.body)
             console.log('sending respond from end user login')
             sessionId = await Response.query?.logon?.sessionId;
+
             if (sessionId === undefined) {
                 sessionId = 'no session Id';
             } else {
