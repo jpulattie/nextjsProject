@@ -1,13 +1,13 @@
 import { parseStringPromise } from 'xml2js';
 
 
-export default async function POST(req ,res) {
+export async function POST(req ,res) {
     //const request = await req.headers.get('Content-Type');
-    console.log('request:', req.body)
+
     
     //const data = await req.json()
     //console.log('request to end user login from page.js:', data)
-    const { userName, userPassword, sessionId } = req.body;
+    let { userName, userPassword, sessionId } = req.body;
     const url = process.env.CONNECTION_URL;
     let sessionStatus = '';
 
@@ -34,8 +34,20 @@ export default async function POST(req ,res) {
                 'Content-Type':'application/xml',
                 }});
         if (response.ok) {
-            const data = await response.text();
-            console.log('Raw XML end user login response:', request.body)
+            //const data = await response.text();
+            //console.log('Raw XML end user login response:', data.body)
+            console.log('sending respond from end user login')
+            //sessionId = await Response.query?.logon?.sessionId;
+
+            console.log('sessionId:', sessionId)
+
+            return new Response(JSON.stringify({ loggedIn : "yes", sessionId : sessionId }), {
+                status:200,
+                headers: {
+                  'Content-Type': 'application/json'
+          
+                },
+              });
 
         } else {
             console.error('Error with vendor login: ', response.statusText);
@@ -45,6 +57,3 @@ export default async function POST(req ,res) {
         }
             
         }
-
-
-
