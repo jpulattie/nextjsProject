@@ -1,19 +1,22 @@
 "use client"
-import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { useState } from 'react';
+import {setSessionData, sessionData} from './sessionStore';
 
 export default function Home() {
   let [userName, setUserName] = useState('');
   let [password, setPassword] = useState('');
-  const router = useRouter();
-  const [error, setError] = useState(null);
   let vendorUser = process.env.vendorUser;
   let vendorPass = process.env.vendorPass;
   let url = process.env.CONNECTION_URL;
-  let sessionId;
+  let sessionId = null;
+  let personSerial;
+  let loginSerial;
 
 
-  const vendorLogin = async() => {
+
+
+  const vendorLogin = async () => {
     try {
       const response = await fetch('/api/vendorLogin', {
         method: 'POST',
@@ -22,88 +25,100 @@ export default function Home() {
         },
         body: JSON.stringify({ vendorUser, vendorPass, url }),
       });
-      if (response.ok){
+      if (response.ok) {
         const data = await response.json();
-        sessionId = data.sessionId;
-        console.log('returned sessionId:', sessionId)
+        sessionId = (data.sessionId);
         return sessionId;
+      } else {
+        return;
+      }
+    } catch (error) {
+      console.error('error during vendor login:', error);
+      return
+    }
+  }
+
+  const postingStatus = async (sessionId, loginSerial, personSerial) => {
+    try {
+      const response = await fetch('./api/postingStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ sessionId: sessionId, loginSerial: loginSerial, personSerial: personSerial }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
       } else {
         console.error("Vendor Login Failed:", response.statusText);
         return;
       }
-      } catch (error) {
-        console.error('error during vendor login:', error);
-        return
-      }
+    } catch (error) {
+      console.error('error during vendor login:', error);
+      return
     }
-  
-  
-  
+  }
+
   const endUserLogin = async (sessionIdparam) => {
     try {
-      console.log('session id parameter:', sessionIdparam)
       const response = await fetch('./api/endUserLogin', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ userName, userPassword: password, sessionId: sessionIdparam }),
-  });
-  if (response.ok){
-    const data = await response.json();
-    console.log('data from end user login function:', data)
-    return data;
-  } else {
-    console.error("Vendor Login Failed:", response.statusText);
-    return;
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userName, userPassword: password, sessionId: sessionIdparam }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        console.error("Vendor Login Failed:", response.statusText);
+        return;
+      }
+    } catch (error) {
+      console.error('error during vendor login:', error);
+      return
+    }
   }
-  } catch (error) {
-    console.error('error during vendor login:', error);
-    return
-  }
-}
 
-    
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('username: ', userName);
-    console.log('password: ', password);
-
-
-
-    console.log('trying end user login')
-    console.log('username: '+ userName + ' password: '+ password + ' sessionId: ' + sessionId);
-    if (sessionId === undefined){
+ 
+    if (sessionId === null || undefined) {
+      console.log('session id undefined')
       let vendorLoginResponse = await vendorLogin();
-      console.log('sessionId undefined, trying vendor and end user logins again')
-      sessionId = vendorLoginResponse;
-      console.log('new session id:', sessionId)
+      sessionId = (vendorLoginResponse);
+      console.log('session id check page.js:', sessionId)
     }
     let endUserLoginResponse = await endUserLogin(sessionId);
 
-
-    //console.log('response from end user login')
-    console.log('sessionId', sessionId)
-    console.log('endUserLoginResponse:', endUserLoginResponse.sessionId);
-    console.log('testing if else:', endUserLoginResponse.ok, "session part", (sessionId !== undefined))
     if (endUserLoginResponse.sessionId === 'Session not logged on or session timed out') {
-      console.log('sessionId undefined, trying vendor and end user logins again')
-      sessionId = vendorLoginResponse;
-      console.log('new session id:', sessionId)
+      sessionId = (vendorLoginResponse);
       let retryEndUser = await endUserLogin(sessionId);
       console.log('second try at end user login:', retryEndUser)
       return;
-      
-    } else if (endUserLoginResponse.ok && sessionId !== undefined) {
-      console.log('Login successful:', endUserLoginResponse);
-      console.log('sessionId:' + sessionId + '(end sessionId)')
 
-      //router.push('/app/viewAccounts/page.js')
-    
+    } else if (endUserLoginResponse.ok && sessionId !== undefined) {
+      loginSerial = endUserLoginResponse.loginSerial;
+      personSerial=endUserLoginResponse.personSerial;
+
+
+      let postingResponse = await postingStatus(sessionId, loginSerial, personSerial);
+
+      setSessionData({
+        sessionId, 
+        loginSerial, 
+        personSerial, 
+        personFirstName: postingResponse.personFirstName,
+        personLastName:postingResponse.personLastName,
+        accounts:postingResponse.accounts})
+      redirect('/viewAccounts')
     };
   }
-  
+
   return (
     <div>
       <main>
@@ -117,13 +132,15 @@ export default function Home() {
               onChange={(e) => setUserName(e.target.value)}
               placeholder="Username"
             />
-            <input type="password" 
-             name="password"
-             value={password}
-             onChange={(e) => setPassword(e.target.value)}
-             placeholder="Password"
-            /> 
+            <input type="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+            />
             <button type="submit">Login</button>
+
+
           </form>
         </div>
       </main>

@@ -1,29 +1,32 @@
 import { parseStringPromise } from 'xml2js';
 
-
 export async function POST(req ,res) {
+
     const data = await req.json()
-    let { userName, userPassword, sessionId } = data;
+    let { personSerial, loginSerial, sessionId } = data;
     const url = process.env.CONNECTION_URL;
     let sessionStatus = '';
     let sessionException;
 
     const call2 = `<query xmlns="http://www.corelationinc.com/queryLanguage/v1.0"
-    sessionId="${sessionId}">
-    <sequence>
-      <transaction>
-      <step>
-        <loginVerify>
-        <loginId>${userName}</loginId>
-        <password>${userPassword}</password>
-        </loginVerify>
-      </step>
-      </transaction>
-    </sequence>
-    </query>
+ sessionId="${sessionId}">
+ <sequence>
+  <transaction>
+    <personSerial>${personSerial}</personSerial>
+   <step>
+        <postingStatus>
+            <tableName>LOGIN</tableName>
+            <targetSerial>${loginSerial}</targetSerial>
+            <includePersonRelatedAccounts option="Y" />
+        </postingStatus>
+    </step>
+  </transaction>
+ </sequence>
+</query>
     `;
 
         try {
+
             const response = await fetch(url, {
                 method: 'POST',
                 body: call2,
@@ -33,12 +36,9 @@ export async function POST(req ,res) {
         if (response.ok) {
             const xmldata = await response.text();
             const parsedXML = await parseStringPromise(xmldata);
-            console.log('end user logon', xmldata)
-            const firstTrans = (parsedXML.query?.sequence?.[0].transaction?.[0]);
-            const firstStep = firstTrans?.step?.[0];
+            console.log(parsedXML)
 
-            const personSerialResult = firstStep?.loginVerify?.[0]?.personSerialResult?.[0];
-            const loginSerialResult = firstStep?.loginVerify?.[0]?.loginSerialResult?.[0];
+
             if (parsedXML.query.sequence?.transaction?.exception !== undefined) {
             sessionException = parsedXML.query.sequence?.transaction?.exception?.message;
             }
@@ -56,11 +56,22 @@ export async function POST(req ,res) {
                   });
             } else {
                 sessionId = Response.query?.logon?.sessionId;
-                let personSerial = personSerialResult 
-                let loginSerial = loginSerialResult;
+            const firstTrans = (parsedXML.query?.sequence?.[0].transaction?.[0]);
+            const firstStep = firstTrans?.step?.[0];
+            let accounts;
+            if (firstStep?.postingStatus?.[0]?.account?.[0]) {
+            accounts = firstStep?.postingStatus?.[0]?.account;
+            }
+            const personInfo = firstStep?.postingStatus?.[0]?.person?.[0];
+            const personFirstName = firstStep?.postingStatus?.[0]?.person?.[0].firstName?.[0];
+            const personLastName = firstStep?.postingStatus?.[0]?.person?.[0].lastName?.[0];
 
 
-            return new Response(JSON.stringify({ sessionId : sessionId, personSerial:personSerial, ok: "ok", loginSerial: loginSerial }), {
+            return new Response(JSON.stringify({  
+                personFirstName, 
+                personLastName,
+                accounts
+                }), {
                 status:200,
                 headers: {
                   'Content-Type': 'application/json'

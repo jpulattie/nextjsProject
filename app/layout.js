@@ -38,8 +38,8 @@ export default function RootLayout({ children }) {
 
           </div>
           <nav className="row-start-2 gap-1 col-span-6 grid cols-1 sm:grid-cols-6 md:grid-cols-6 lg:grid-cols-6 container m-auto bg-primroseYellow text-myrtleGreen text-base">
-            <Link className="col-span-2" href="/rosters">View Accounts</Link>
-            <Link className="col-span-2" href="/schedules">Transfer Funds</Link>
+            <Link className="col-span-2" href="/viewAccounts">View Accounts</Link>
+            <Link className="col-span-2" href="/TransferFunds">Transfer Funds</Link>
             <Link className="col-span-2" href="/">Logout</Link>
 
           </nav>
